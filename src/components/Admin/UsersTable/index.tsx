@@ -1,5 +1,5 @@
 import useAdminContext from "@/context/AdminState"
-import useDebounce from "@/hooks/useDebouce"
+import useDebounce from "@/hooks/generic/useDebounce"
 import { User } from "@prisma/client"
 import React, { ChangeEvent, useState } from "react"
 import DeleteUserDialog from "./DeleteUserDialog"
@@ -15,7 +15,7 @@ const UsersTable = (props: Props) => {
 
     useDebounce(
         () => {
-            let regex = new RegExp(search, "gi")
+            let regex = new RegExp(search, "i")
             setFilteredUsers(
                 users.filter(
                     (user) =>
@@ -34,7 +34,7 @@ const UsersTable = (props: Props) => {
     }
 
     return (
-        <>
+        <section>
             <div className="grid grid-cols-4 grid-flow-row gap-4">
                 <div className="col-span-2">
                     <h1 className="text-2xl font-bold">Users</h1>
@@ -45,6 +45,7 @@ const UsersTable = (props: Props) => {
                         type="text"
                         className="input input-sm input-bordered"
                         placeholder="Search user"
+                        value={search}
                         onChange={searchHandler}
                     />
                 </div>
@@ -77,7 +78,7 @@ const UsersTable = (props: Props) => {
                 </table>
             </div>
             <DeleteUserDialog />
-        </>
+        </section>
     )
 }
 

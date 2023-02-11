@@ -1,4 +1,5 @@
-import { getUser } from "@/lib/getUser"
+import Header from "@/components/Layout/Header"
+import { checkUser } from "@/utils/authenticator"
 import { GetServerSideProps } from "next"
 import Head from "next/head"
 import React from "react"
@@ -11,26 +12,24 @@ const Landing = ({}: Props) => {
             <Head>
                 <title>Storefront - Your Lowkey Marketplace</title>
             </Head>
-		<section className=""></section>
+            <Header />
+            <section className=""></section>
         </>
     )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const user = await getUser(context)
+    const user = await checkUser(context)
 
-    if (user) {
+    if (!user)
         return {
-            redirect: {
-                destination: "/home",
-                permanent: false,
-            },
+            props: {},
         }
-    }
 
     return {
-        props: {
-            user,
+        redirect: {
+            destination: "/home",
+            permanent: false,
         },
     }
 }

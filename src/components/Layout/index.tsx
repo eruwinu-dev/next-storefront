@@ -26,7 +26,6 @@ const Layout = ({ children }: Props) => {
                     }
                 `}
             </style>
-            <Header />
             {children}
         </>
     )

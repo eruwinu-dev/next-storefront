@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout"
 import { AdminProvider } from "@/context/AdminState"
+import { SellerProvider } from "@/context/SellerState"
 import "@/styles/globals.css"
 import {
     Hydrate,
@@ -11,6 +12,9 @@ import type { AppProps } from "next/app"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { UserProvider } from "@/context/Userstate"
+
 export default function App({ Component, pageProps }: AppProps) {
     const { pathname } = useRouter()
     const [queryClient] = useState(() => new QueryClient())
@@ -19,15 +23,26 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
                 <SessionProvider session={pageProps.session}>
-                    <Layout>
-                        {["/admin"].includes(pathname) ? (
-                            <AdminProvider>
+                    {["/admin"].includes(pathname) ? (
+                        <AdminProvider>
+                            <Layout>
                                 <Component {...pageProps} />
-                            </AdminProvider>
-                        ) : (
-                            <Component {...pageProps} />
-                        )}
-                    </Layout>
+                            </Layout>
+                        </AdminProvider>
+                    ) : pathname.match("/seller") ? (
+                        <SellerProvider>
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
+                        </SellerProvider>
+                    ) : (
+                        <UserProvider>
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
+                        </UserProvider>
+                    )}
+                    <ReactQueryDevtools initialIsOpen={false} />
                 </SessionProvider>
             </Hydrate>
         </QueryClientProvider>

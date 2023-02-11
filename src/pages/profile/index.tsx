@@ -1,4 +1,5 @@
-import { getUser } from "@/lib/getUser"
+import Header from "@/components/Layout/Header"
+import { checkUser } from "@/utils/authenticator"
 import { User } from "@prisma/client"
 import { GetServerSideProps } from "next"
 import Head from "next/head"
@@ -14,13 +15,15 @@ const Profile = ({ user }: Props) => {
             <Head>
                 <title>Profile | Storefront</title>
             </Head>
+            <Header />
+
             <main></main>
         </>
     )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const user = await getUser(context)
+    const user = await checkUser(context)
 
     if (!user) {
         return {

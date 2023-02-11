@@ -1,0 +1,121 @@
+import useUserContext from "@/context/Userstate"
+import { useGetAddresses } from "@/hooks/address/useGetAddresses"
+import { useGetCheckOut } from "@/hooks/checkout/useGetCheckOut"
+import { groupBy } from "@/utils/grouper"
+import { priceFormatter } from "@/utils/priceFormatter"
+import { summer } from "@/utils/summer"
+import React, { MouseEvent, useEffect, useMemo } from "react"
+import ChangeCheckoutAddressDialog from "./ChangeCheckoutAddressDialog"
+import CheckoutGridGroup from "./CheckoutGridGroup"
+
+type Props = {}
+
+const CheckoutGrid = (props: Props) => {
+    const { selectCheckoutAddress, toggleUserDialog, checkoutAddressId } =
+        useUserContext()
+    const { data: checkout } = useGetCheckOut()
+    const { data: addresses } = useGetAddresses()
+
+    if (!checkout) return <></>
+    if (!addresses) return <></>
+
+    let groupedCheckout = groupBy(checkout, (i) => i.Product.storeId)
+    let storesInCheckout = Object.keys(groupedCheckout)
+
+    let totalPrice = useMemo(
+        () =>
+            summer(
+                checkout.map((order) => ({
+                    price: order.Variant?.price || 0,
+                    quantity: order.quantity,
+                }))
+            ),
+        [checkout]
+    )
+
+    const openChangeCheckoutAddressDialogHandler = (
+        event: MouseEvent<HTMLButtonElement>
+    ) => {
+        toggleUserDialog("changeCheckoutAddress")
+    }
+
+    const selectedAddress = useMemo(
+        () => addresses.find((address) => address.id === checkoutAddressId),
+        [checkoutAddressId]
+    )
+
+    useEffect(() => {
+        let defaultAddress = addresses.find((address) => address.isDefault)
+        if (!defaultAddress) return
+        selectCheckoutAddress(defaultAddress.id || null)
+        return () => {}
+    }, [])
+
+    return (
+        <>
+            <section className="grid grid-cols-1 grid-flow-row gap-4 p-4">
+                <h1 className="text-xl font-bold">Check Out</h1>
+                <div className="grid grid-cols-1 grid-flow-row gap-2">
+                    <div className="inline-flex items-end justify-start space-x-4">
+                        <span className="text-lg">Delivery Address: </span>
+                        <div className="inline-flex items-end justify-start space-x-2">
+                            <span className="font-semibold">
+                                {selectedAddress
+                                    ? `${selectedAddress.name}`
+                                    : ``}
+                            </span>
+                            <span>
+                                {selectedAddress
+                                    ? `${selectedAddress.streetName} ${selectedAddress.addressLine} ${selectedAddress.postalCode}`
+                                    : `No default address.`}
+                            </span>
+                        </div>
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-info"
+                            onClick={openChangeCheckoutAddressDialogHandler}
+                        >
+                            Change
+                        </button>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 grid-flow-row">
+                    {storesInCheckout.length ? (
+                        storesInCheckout.map((storeId) => (
+                            <CheckoutGridGroup
+                                orders={groupedCheckout[storeId]}
+                                key={storeId}
+                            />
+                        ))
+                    ) : (
+                        <div className="mx-auto">
+                            <span className="text-center">
+                                You have no products for checkout.
+                            </span>
+                        </div>
+                    )}
+                </div>
+                <div className="grid grid-cols-4 grid-flow-row place-items-center gap-4">
+                    <div className="col-span-2" />
+                    <div className="w-full inline-flex items-center justify-end space-x-4">
+                        <span className="text-lg">Total: </span>
+                        <span className="text-xl font-bold">
+                            {priceFormatter.format(totalPrice)}
+                        </span>
+                    </div>
+                    <div className="w-full inline-flex items-center justify-end">
+                        <button
+                            type="button"
+                            className="btn btn-wide btn-sm btn-success"
+                        >
+                            Check out
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <ChangeCheckoutAddressDialog />
+        </>
+    )
+}
+
+export default CheckoutGrid

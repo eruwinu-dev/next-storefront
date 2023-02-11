@@ -1,19 +1,23 @@
+import StoresTable from "@/components/Admin/StoresTable"
 import UsersTable from "@/components/Admin/UsersTable"
 import useAdminContext from "@/context/AdminState"
-import { getAdminUsers } from "@/lib/admin/getAdminUsers"
-import { getUser } from "@/lib/getUser"
-import { User } from "@prisma/client"
+import { Store, User } from "@prisma/client"
 import { GetServerSideProps } from "next"
 import Head from "next/head"
 import React, { useEffect, useRef } from "react"
+import { getUsers } from "@/lib/user/getUsers"
+import { getStores } from "@/lib/store/getStores"
+import { checkUser } from "@/utils/authenticator"
+import Header from "@/components/Layout/Header"
 
 type Props = {
     admin: User
     users: User[]
+    stores: Store[]
 }
 
-const Admin = ({ admin, users }: Props) => {
-    const { getAdmin, getUsers } = useAdminContext()
+const Admin = ({ admin, users, stores }: Props) => {
+    const { getAdmin, getUsers, getStores } = useAdminContext()
     const calledOnce = useRef(false)
 
     useEffect(() => {
@@ -21,6 +25,7 @@ const Admin = ({ admin, users }: Props) => {
         else {
             getAdmin(admin)
             getUsers(users)
+            getStores(stores)
             calledOnce.current = true
         }
     }, [])
@@ -28,19 +33,19 @@ const Admin = ({ admin, users }: Props) => {
     return (
         <>
             <Head>
-                <title>Admin | Storefront</title>
+                <title>Admin Dashboard | Storefront</title>
             </Head>
-            <main>
-                <section>
-                    <UsersTable />
-                </section>
+            <Header />
+            <main className="grid grid-cols-1 grid-flow-row gap-8 place-content-start">
+                <UsersTable />
+                <StoresTable />
             </main>
         </>
     )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const admin = await getUser(context)
+    const admin = await checkUser(context)
 
     if (!admin) {
         return {
@@ -60,12 +65,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const users = await getAdminUsers(admin.id)
+    const users = await getUsers()
+    const stores = await getStores(null)
 
     return {
         props: {
             admin,
             users,
+            stores,
         },
     }
 }

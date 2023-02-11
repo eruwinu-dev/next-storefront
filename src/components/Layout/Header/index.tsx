@@ -8,9 +8,7 @@ type Props = {}
 
 const Header = ({}: Props) => {
     const { pathname } = useRouter()
-    const { status, data: session } = useSession()
-
-    let user = session?.user
+    const { status } = useSession()
 
     return (
         <header>

@@ -49,7 +49,7 @@ const DeleteUserDialog = (props: Props) => {
                     <div className="inline-flex items-center justify-end space-x-2 p-2">
                         <button
                             type="button"
-                            className="btn-sm btn-accent"
+                            className="btn-sm btn-error"
                             onClick={toggleDeleteUserDialogHandler}
                         >
                             Cancel

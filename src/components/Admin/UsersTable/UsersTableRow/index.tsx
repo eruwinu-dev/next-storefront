@@ -172,7 +172,7 @@ const UsersTableRow = ({ user }: Props) => {
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-sm btn-outline btn-square btn-accent"
+                                className="btn btn-sm btn-square btn-error"
                                 onClick={openDeleteUserDialogHandler}
                             >
                                 <svg

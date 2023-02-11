@@ -1,14 +1,16 @@
-import { Role, User } from "@prisma/client"
+import { Role, Store, StoreStatus, User } from "@prisma/client"
 import { ActionStatus } from "./action"
 
 export interface AdminAction {
     editUser: ActionStatus
     deleteUser: ActionStatus
+    changeStoreStatus: ActionStatus
 }
 
 export interface AdminDialog {
     editUser: boolean
     deleteUser: boolean
+    changeStoreStatus: boolean
 }
 
 export interface AdminContextType {
@@ -25,6 +27,15 @@ export interface AdminContextType {
         role: Role
     ) => Promise<boolean | undefined>
     deleteUser: (userId: string) => Promise<boolean | undefined>
+    stores: Store[]
+    selectedStoreId: string | null
+    getStores: (stores: Store[]) => void
+    selectStore: (storeId: string | null) => void
+    findStore: (storeId: string) => Store | undefined
+    changeStoreStatus: (
+        storeId: string,
+        status: StoreStatus
+    ) => Promise<boolean | undefined>
     adminAction: AdminAction
     toggleAdminAction: (prop: keyof AdminAction, state: ActionStatus) => void
     adminDialog: AdminDialog

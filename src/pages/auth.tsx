@@ -1,4 +1,5 @@
-import { getUser } from "@/lib/getUser"
+import Header from "@/components/Layout/Header"
+import { checkUser } from "@/utils/authenticator"
 import { GetServerSideProps } from "next"
 import { signIn } from "next-auth/react"
 import Head from "next/head"
@@ -15,6 +16,7 @@ const Auth = ({}: Props) => {
             <Head>
                 <title>Sign In | Storefront</title>
             </Head>
+            <Header />
             <main className="inline-flex items-center">
                 <div className="-translate-y-[10vh] lg:w-3/12 md:w-4/12 sm:w-8/12 h-auto mx-auto p-4 aspect-square flex flex-col items-center justfy-start space-y-8 rounded-lg shadow-lg">
                     <h1 className="text-6xl font-serif font-extrabold">S</h1>
@@ -25,7 +27,11 @@ const Auth = ({}: Props) => {
                         Storefront is your one-stop store to get an unforgetable
                         shopping experience.
                     </p>
-                    <button type="button" onClick={signInHandler}>
+                    <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={signInHandler}
+                    >
                         Continue with Google
                     </button>
                 </div>
@@ -35,7 +41,7 @@ const Auth = ({}: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const user = await getUser(context)
+    const user = await checkUser(context)
 
     if (user) {
         return {
