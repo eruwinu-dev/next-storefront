@@ -1,6 +1,6 @@
 import BaseDialog from "@/components/BaseDialog"
 import DialogSpinner from "@/components/BaseDialog/DialogSpinner"
-import useUserContext from "@/context/Userstate"
+import useUserContext from "@/context/UserState"
 import { useGetAddresses } from "@/hooks/address/useGetAddresses"
 import React, { MouseEvent } from "react"
 

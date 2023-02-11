@@ -13,7 +13,7 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { UserProvider } from "@/context/Userstate"
+import { UserProvider } from "@/context/UserState"
 
 export default function App({ Component, pageProps }: AppProps) {
     const { pathname } = useRouter()

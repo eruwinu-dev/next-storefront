@@ -1,6 +1,6 @@
 import BaseDialog from "@/components/BaseDialog"
 import React, { MouseEvent } from "react"
-import useUserContext from "@/context/Userstate"
+import useUserContext from "@/context/UserState"
 import { signIn } from "next-auth/react"
 
 type Props = {}

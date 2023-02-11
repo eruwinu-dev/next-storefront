@@ -155,8 +155,9 @@ enum StoreStatus {
 }
 
 type OrderProgress {
-  status OrderStatus
-  date   DateTime    @default(now())
+  status  OrderStatus
+  message String
+  date    DateTime    @default(now())
 }
 
 type StoreProgress {

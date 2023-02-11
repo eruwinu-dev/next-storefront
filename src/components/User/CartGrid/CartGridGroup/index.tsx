@@ -1,4 +1,4 @@
-import useUserContext from "@/context/Userstate"
+import useUserContext from "@/context/UserState"
 import { CompleteCart } from "@/types/user"
 import React, { ChangeEvent } from "react"
 import CartGridItem from "./CartGridItem"

@@ -1,6 +1,6 @@
 import NextImage from "@/components/NextImage"
 import QuantitySelector from "@/components/QuantitySelector"
-import useUserContext from "@/context/Userstate"
+import useUserContext from "@/context/UserState"
 import { useDeleteCartOrders } from "@/hooks/cart/useDeleteCartOrder"
 import { useEditCheckoutQuantity } from "@/hooks/cart/useEditCheckoutQuantity"
 import { CompleteCart } from "@/types/user"

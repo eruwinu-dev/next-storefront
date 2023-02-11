@@ -1,20 +1,28 @@
-import useUserContext from "@/context/Userstate"
+import useUserContext from "@/context/UserState"
 import { useGetAddresses } from "@/hooks/address/useGetAddresses"
+import { useCheckOut } from "@/hooks/checkout/useCheckOut"
 import { useGetCheckOut } from "@/hooks/checkout/useGetCheckOut"
+import { ReducedOrder } from "@/types/user"
 import { groupBy } from "@/utils/grouper"
 import { priceFormatter } from "@/utils/priceFormatter"
 import { summer } from "@/utils/summer"
 import React, { MouseEvent, useEffect, useMemo } from "react"
 import ChangeCheckoutAddressDialog from "./ChangeCheckoutAddressDialog"
+import CheckoutDialog from "./CheckoutDialog"
 import CheckoutGridGroup from "./CheckoutGridGroup"
 
 type Props = {}
 
 const CheckoutGrid = (props: Props) => {
-    const { selectCheckoutAddress, toggleUserDialog, checkoutAddressId } =
-        useUserContext()
+    const {
+        selectCheckoutAddress,
+        toggleUserDialog,
+        toggleUserAction,
+        checkoutAddressId,
+    } = useUserContext()
     const { data: checkout } = useGetCheckOut()
     const { data: addresses } = useGetAddresses()
+    const { mutateAsync: mutateCheckOut } = useCheckOut()
 
     if (!checkout) return <></>
     if (!addresses) return <></>
@@ -50,6 +58,24 @@ const CheckoutGrid = (props: Props) => {
         selectCheckoutAddress(defaultAddress.id || null)
         return () => {}
     }, [])
+
+    const checkOutHandler = async (event: MouseEvent<HTMLButtonElement>) => {
+        if (!checkoutAddressId) return
+        toggleUserDialog("checkOut")
+        toggleUserAction("checkOut", "LOADING")
+        const groupedOrders: Record<string, ReducedOrder[]> = groupBy(
+            checkout.map((order) => ({
+                id: order.id,
+                storeId: order.Product.storeId,
+            })),
+            (i) => i.storeId
+        )
+        const a = await mutateCheckOut({
+            groupedOrders,
+            addressId: checkoutAddressId,
+        })
+        toggleUserAction("checkOut", "SUCCESS")
+    }
 
     return (
         <>
@@ -88,8 +114,8 @@ const CheckoutGrid = (props: Props) => {
                             />
                         ))
                     ) : (
-                        <div className="mx-auto">
-                            <span className="text-center">
+                        <div className="mx-auto aspect-video inline-flex items-center justify-center">
+                            <span className="text-center font-semibold">
                                 You have no products for checkout.
                             </span>
                         </div>
@@ -107,6 +133,10 @@ const CheckoutGrid = (props: Props) => {
                         <button
                             type="button"
                             className="btn btn-wide btn-sm btn-success"
+                            onClick={checkOutHandler}
+                            disabled={
+                                !storesInCheckout.length || !checkoutAddressId
+                            }
                         >
                             Check out
                         </button>
@@ -114,6 +144,7 @@ const CheckoutGrid = (props: Props) => {
                 </div>
             </section>
             <ChangeCheckoutAddressDialog />
+            <CheckoutDialog />
         </>
     )
 }

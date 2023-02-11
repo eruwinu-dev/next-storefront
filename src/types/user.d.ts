@@ -1,4 +1,4 @@
-import { addressSchema } from "@/context/Userstate"
+import { addressSchema } from "@/context/UserState"
 import { Order, Product, Store, Variant } from "@prisma/client"
 import { z } from "zod"
 import { ActionStatus } from "./action"
@@ -8,6 +8,11 @@ type CompleteCart = Order & {
         store: Store
     }
     Variant: Variant | null
+}
+
+type ReducedOrder = {
+    id: string
+    storeId: string
 }
 
 export interface UserAction {
