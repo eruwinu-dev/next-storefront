@@ -17,8 +17,8 @@ const Auth = ({}: Props) => {
                 <title>Sign In | Storefront</title>
             </Head>
             <Header />
-            <main className="inline-flex items-center">
-                <div className="-translate-y-[10vh] lg:w-3/12 md:w-4/12 sm:w-8/12 h-auto mx-auto p-4 aspect-square flex flex-col items-center justfy-start space-y-8 rounded-lg shadow-lg">
+            <main className="inline-flex items-center bg-accent-focus">
+                <div className="bg-white -translate-y-[10vh] lg:w-3/12 md:w-4/12 sm:w-8/12 h-auto mx-auto p-4 aspect-square flex flex-col items-center justfy-start space-y-8 rounded-lg shadow-lg">
                     <h1 className="text-6xl font-serif font-extrabold">S</h1>
                     <h2 className="text-3xl font-bold text-center font-serif">
                         Your lowkey marketplace.

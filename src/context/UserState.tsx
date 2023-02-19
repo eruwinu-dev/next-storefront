@@ -1,5 +1,6 @@
 import { ActionStatus } from "@/types/action"
 import { UserAction, UserContextType, UserDialog } from "@/types/user"
+import { fetcher } from "@/utils/fetcher"
 import { createContext, ReactNode, useContext, useState } from "react"
 import { z } from "zod"
 
@@ -18,6 +19,8 @@ const initialUserAction: UserAction = {
     deleteAddress: "IDLE",
     setDefaultAddresss: "IDLE",
     changeCheckoutAddress: "IDLE",
+    proceedOrder: "IDLE",
+    cancelOrder: "IDLE",
 }
 
 const initialUserDialog: UserDialog = {
@@ -31,6 +34,8 @@ const initialUserDialog: UserDialog = {
     deleteAddress: false,
     setDefaultAddresss: false,
     changeCheckoutAddress: false,
+    proceedOrder: false,
+    cancelOrder: false,
 }
 
 export const addressSchema = z.object({
@@ -64,12 +69,29 @@ export const UserProvider = ({ children }: Props) => {
         null
     )
 
+    const [selectedCategory, setSelectedCategory] = useState<string>("ALL")
+
+    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
+
     const selectVariant = (id: string | null) => setSelectedVariantId(id)
 
     const selectAddress = (id: string | null) => setSelectedAddressId(id)
 
+    const setCheckoutCookie = async () => {
+        const { cookie } = await fetcher(
+            "/api/cart/cookie",
+            "POST",
+            JSON.stringify({ checkOutOrderIds })
+        )
+        return cookie
+    }
+
     const selectCheckoutAddress = (id: string | null) =>
         setCheckoutAddressId(id)
+
+    const selectCategory = (name: string) => setSelectedCategory(name)
+
+    const selectOrder = (id: string | null) => setSelectedOrderId(id)
 
     const toggleUserAction = (prop: keyof UserAction, state: ActionStatus) => {
         setUserAction((userAction) => ({ ...userAction, [prop]: state }))
@@ -95,6 +117,11 @@ export const UserProvider = ({ children }: Props) => {
         selectAddress,
         checkoutAddressId,
         selectCheckoutAddress,
+        setCheckoutCookie,
+        selectedCategory,
+        selectCategory,
+        selectedOrderId,
+        selectOrder,
     }
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

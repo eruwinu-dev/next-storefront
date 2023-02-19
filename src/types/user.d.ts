@@ -26,6 +26,8 @@ export interface UserAction {
     deleteAddress: ActionStatus
     setDefaultAddresss: ActionStatus
     changeCheckoutAddress: ActionStatus
+    proceedOrder: ActionStatus
+    cancelOrder: ActionStatus
 }
 
 export interface UserDialog {
@@ -39,6 +41,8 @@ export interface UserDialog {
     deleteAddress: boolean
     setDefaultAddresss: boolean
     changeCheckoutAddress: boolean
+    proceedOrder: boolean
+    cancelOrder: boolean
 }
 
 export interface UserContextType {
@@ -54,6 +58,11 @@ export interface UserContextType {
     selectAddress: (id: string | null) => void
     checkoutAddressId: string | null
     selectCheckoutAddress: (id: string | null) => void
+    setCheckoutCookie: () => Promise<string | undefined>
+    selectedCategory: string
+    selectCategory: (name: string) => void
+    selectedOrderId: string | null
+    selectOrder: (id: string | null) => void
 }
 
 type AddressSchema = z.infer<typeof addressSchema>

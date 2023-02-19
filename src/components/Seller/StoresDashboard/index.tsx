@@ -34,7 +34,7 @@ const StoresDashboard = (props: Props) => {
     }
 
     const openAddStoreDialogHandler = (event: MouseEvent<HTMLButtonElement>) =>
-        toggleSellerDialog("addStore")
+        toggleSellerDialog("proceedOrder")
 
     return (
         <>

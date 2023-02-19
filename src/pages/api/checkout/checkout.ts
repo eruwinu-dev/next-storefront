@@ -36,7 +36,7 @@ const handler = async (
                     progress: {
                         push: {
                             status: "VALIDATION",
-                            message: `Deliver to ${addressId}`,
+                            destination: addressId,
                         },
                     },
                     groupId: crypto.randomUUID(),

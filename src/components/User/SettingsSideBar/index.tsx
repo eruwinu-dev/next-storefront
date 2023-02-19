@@ -16,7 +16,7 @@ const SettingsSideBar = (props: Props) => {
                 <span className="font-semibold">{user.name}</span>
             </div>
             <div className="menu p-2">
-                {options.map((option) => (
+                {options.slice(0, 3).map((option) => (
                     <li key={option}>
                         <Link
                             href={`/account/${option}`}

@@ -1,14 +1,18 @@
 import NextImage from "@/components/NextImage"
-import { priceFormatter } from "@/utils/priceFormatter"
-import { Product } from "@prisma/client"
+import { CompleteProduct } from "@/types/store"
+import { priceRange } from "@/utils/priceRanger"
 import Link from "next/link"
 import React from "react"
 
 type Props = {
-    product: Product
+    product: CompleteProduct
 }
 
 const ProductDashboardItem = ({ product }: Props) => {
+    const prices = product.variants
+        .map((variant) => variant.price)
+        .sort((price1, price2) => price1 - price2)
+
     return (
         <Link href={`./${product.storeId}/product/${product.id}`}>
             <div className="w-full grid grid-cols-1 grid-flow-row group">
@@ -27,7 +31,7 @@ const ProductDashboardItem = ({ product }: Props) => {
                     </div>
                     <div>
                         <span className="text-lg font-bold">
-                            {priceFormatter.format(product.price)}
+                            &#8369;{priceRange(prices)}
                         </span>
                     </div>
                 </div>

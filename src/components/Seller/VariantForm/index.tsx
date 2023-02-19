@@ -12,7 +12,8 @@ type Props = {
 }
 
 const VariantForm = ({ form }: Props) => {
-    const { toggleSellerAction, selectedVariantId } = useSellerContext()
+    const { toggleSellerAction, selectedVariantId, selectVariant } =
+        useSellerContext()
 
     const { data: product } = useGetProduct({ role: "seller" })
     const { mutateAsync: mutateAddVariant } = useAddVariant()
@@ -52,6 +53,7 @@ const VariantForm = ({ form }: Props) => {
             await mutateEditVariant({ info: data, id: variant.id })
         }
         toggleSellerAction(prop, "SUCCESS")
+        selectVariant(null)
     }
 
     return (

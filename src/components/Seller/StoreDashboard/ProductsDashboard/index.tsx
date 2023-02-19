@@ -1,10 +1,9 @@
 import useSellerContext from "@/context/SellerState"
 import { useGetProducts } from "@/hooks/product/useGetProducts"
 import useDebounce from "@/hooks/generic/useDebounce"
-import { Product } from "@prisma/client"
 import React, { ChangeEvent, MouseEvent, useState } from "react"
 import ProductDashboardItem from "./ProductDashboardItem"
-import { useGetStore } from "@/hooks/store/useGetStore"
+import { CompleteProduct } from "@/types/store"
 
 type Props = {}
 
@@ -15,7 +14,7 @@ const ProductsDashboard = ({}: Props) => {
         role: "seller",
     })
     const [filteredProducts, setFilteredProducts] = useState<
-        Product[] | undefined
+        CompleteProduct[] | undefined
     >(products)
 
     useDebounce(

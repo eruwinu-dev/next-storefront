@@ -1,6 +1,8 @@
 import NextImage from "@/components/NextImage"
+import useSellerContext from "@/context/SellerState"
 import { useGetProduct } from "@/hooks/product/useGetProduct"
 import { priceFormatter } from "@/utils/priceFormatter"
+import { priceRange } from "@/utils/priceRanger"
 import React from "react"
 import DeleteProductDialog from "./DeleteProductDialog"
 import ProductDashboardDropdown from "./ProductDashboardDropdown"
@@ -11,7 +13,21 @@ type Props = {}
 const ProductDashboard = (props: Props) => {
     const { data: product } = useGetProduct({ role: "seller" })
 
+    const { selectedVariantId } = useSellerContext()
+
     if (!product) return <></>
+
+    const selectedVariant = product.variants.find(
+        (variant) => variant.id === selectedVariantId
+    )
+
+    const prices: number[] = product.variants
+        .map((variant) => variant.price)
+        .sort((price1, price2) => price1 - price2)
+        .filter(
+            (price, index) =>
+                index === 0 || index === product.variants.length - 1
+        )
 
     return (
         <>
@@ -34,9 +50,16 @@ const ProductDashboard = (props: Props) => {
                     </div>
                     <div className="">Orders, Ratings</div>
                     <div>
-                        <h2 className="text-4xl font-bold font-">
-                            {priceFormatter.format(product.price)}
-                        </h2>
+                        {prices.length ? (
+                            <h2 className="text-4xl font-bold font-">
+                                &#8369;
+                                {selectedVariant
+                                    ? priceFormatter.format(
+                                          selectedVariant.price
+                                      )
+                                    : priceRange(prices)}
+                            </h2>
+                        ) : null}
                     </div>
                     <VariantsList />
                 </div>

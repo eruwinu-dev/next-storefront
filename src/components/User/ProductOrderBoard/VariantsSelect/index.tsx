@@ -23,7 +23,7 @@ const VariantsSelect = ({ variants }: Props) => {
                     className={[
                         "btn btn-sm mb-4",
                         variant.id === selectedVariantId
-                            ? "btn-success"
+                            ? "btn-secondary"
                             : "btn-primary",
                     ].join(" ")}
                     onClick={toggleSelectVariant(variant.id)}

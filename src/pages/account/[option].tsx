@@ -11,14 +11,15 @@ import AddressGrid from "@/components/User/AddressGrid"
 import ProfileGrid from "@/components/User/ProfileGrid"
 import OrdersGrid from "@/components/User/OrdersGrid"
 import { ParsedUrlQuery } from "querystring"
-import { AccountOption, options } from "@/utils/options"
+import { options } from "@/utils/options"
+import { getOrders } from "@/lib/order/getOrders"
 
 export interface StaticParams extends ParsedUrlQuery {
-    option: AccountOption
+    option: string
 }
 
 type Props = {
-    option: AccountOption
+    option: string
 }
 
 const Account = ({ option }: Props) => {
@@ -78,8 +79,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     })
 
     await queryClient.prefetchQuery({
+        queryKey: ["cart"],
+        queryFn: async () => getCart(user.id),
+    })
+
+    await queryClient.prefetchQuery({
         queryKey: ["user", "addresses"],
         queryFn: async () => getAddresses({ userId: user.id, id: null }),
+    })
+
+    await queryClient.prefetchQuery({
+        queryKey: ["user", "orders", "ALL"],
+        queryFn: async () =>
+            getOrders({ userId: user.id, role: "user", status: "ALL" }),
     })
 
     return {

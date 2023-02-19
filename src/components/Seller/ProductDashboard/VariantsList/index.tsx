@@ -9,14 +9,19 @@ import VariantsListDropdown from "./VariantsListDropdown"
 type Props = {}
 
 const VariantsList = (props: Props) => {
-    const { toggleSellerDialog } = useSellerContext()
+    const { toggleSellerDialog, selectVariant } = useSellerContext()
     const { data: product } = useGetProduct({ role: "seller" })
     const openAddVariantDialog = (event: MouseEvent<HTMLButtonElement>) =>
         toggleSellerDialog("addVariant")
 
+    const deSelectVariantHandler = (event: MouseEvent<HTMLButtonElement>) =>
+        selectVariant(null)
+
     if (!product) return <></>
 
-    let variants = product.variants
+    let variants = product.variants.sort(
+        (variant1, variant2) => variant1.price - variant2.price
+    )
 
     return (
         <>
@@ -35,6 +40,13 @@ const VariantsList = (props: Props) => {
                 {variants.map((variant) => (
                     <VariantsListDropdown variant={variant} key={variant.id} />
                 ))}
+                <button
+                    type="button"
+                    className="btn btn-ghost btn-sm btn-circle"
+                    onClick={deSelectVariantHandler}
+                >
+                    &#x2716;
+                </button>
             </div>
             <AddVariantDialog />
             <EditVariantDialog />

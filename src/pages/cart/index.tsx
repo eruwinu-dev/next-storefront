@@ -8,8 +8,6 @@ import { getCart } from "@/lib/cart/getCart"
 import CartGrid from "@/components/User/CartGrid"
 import CartTotalBar from "@/components/User/CartTotalBar"
 
-import nookies from "nookies"
-
 type Props = {}
 
 const Home = ({}: Props) => {
@@ -31,7 +29,7 @@ const Home = ({}: Props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const user = await checkUser(context)
 
-    nookies.destroy(context, "checkout-cart")
+    context.res.setHeader("Set-Cookie", ["checkout-cart=''; Max-Age=0; Path=/"])
 
     if (!user) {
         return {

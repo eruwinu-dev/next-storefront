@@ -24,6 +24,8 @@ const initialSellerAction: SellerAction = {
     addVariant: "IDLE",
     editVariant: "IDLE",
     deleteVariant: "IDLE",
+    proceedOrder: "IDLE",
+    cancelOrder: "IDLE",
 }
 
 const initialAdminDialog: SellerDialog = {
@@ -36,6 +38,8 @@ const initialAdminDialog: SellerDialog = {
     addVariant: false,
     editVariant: false,
     deleteVariant: false,
+    proceedOrder: false,
+    cancelOrder: false,
 }
 
 export const storeSchema = z.object({
@@ -72,8 +76,12 @@ export const SellerProvider = ({ children }: Props) => {
     const [stores, setStores] = useState<Store[]>([])
 
     const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
-        ``
+        null
     )
+
+    const [selectedCategory, setSelectedCategory] = useState<string>("ALL")
+
+    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
 
     const [sellerAction, setSellerAction] =
         useState<SellerAction>(initialSellerAction)
@@ -134,6 +142,10 @@ export const SellerProvider = ({ children }: Props) => {
 
     const selectVariant = (id: string | null) => setSelectedVariantId(id)
 
+    const selectOrder = (id: string | null) => setSelectedOrderId(id)
+
+    const selectCategory = (status: string) => setSelectedCategory(status)
+
     const toggleSellerAction = (
         prop: keyof SellerAction,
         state: ActionStatus
@@ -159,6 +171,10 @@ export const SellerProvider = ({ children }: Props) => {
         findStore,
         selectedVariantId,
         selectVariant,
+        selectedOrderId,
+        selectOrder,
+        selectedCategory,
+        selectCategory,
         sellerAction,
         toggleSellerAction,
         sellerDialog,

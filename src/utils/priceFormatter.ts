@@ -1,4 +1,4 @@
 export const priceFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "PHP",
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
 })

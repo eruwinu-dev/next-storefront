@@ -43,7 +43,7 @@ const HeaderDropdown = (props: Props) => {
                     <Link href="/cart">{`Cart (${cart.length})`}</Link>
                 </li>
                 <li>
-                    <Link href="/orders">Orders</Link>
+                    <Link href="/account/orders">Orders</Link>
                 </li>
                 <li>
                     <Link href="/account/profile">Account</Link>

@@ -70,10 +70,11 @@ const CheckoutGrid = (props: Props) => {
             })),
             (i) => i.storeId
         )
-        const a = await mutateCheckOut({
+        const isCheckedOut = await mutateCheckOut({
             groupedOrders,
             addressId: checkoutAddressId,
         })
+        if (!isCheckedOut) return
         toggleUserAction("checkOut", "SUCCESS")
     }
 

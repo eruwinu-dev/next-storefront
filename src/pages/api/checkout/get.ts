@@ -8,9 +8,11 @@ type Data = {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-    const { userId, orderIds } = req.body
+    const { userId } = req.body
 
-    const orders = await getCheckOut(userId, orderIds.split(" "))
+    const orderIds = (req.cookies["checkout-cart"] || "").split(" ")
+
+    const orders = await getCheckOut(userId, orderIds)
 
     res.status(200).json({ orders })
 }

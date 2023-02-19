@@ -15,7 +15,7 @@ const AddStoreDialog = (props: Props) => {
     } = useSellerContext()
 
     const toggleAddStoreDialogHandler = () => {
-        toggleSellerDialog("addStore")
+        toggleSellerDialog("proceedOrder")
         setTimeout(() => toggleSellerAction("addStore", "IDLE"), 500)
     }
 

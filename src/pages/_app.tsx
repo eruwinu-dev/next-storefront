@@ -42,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
                             </Layout>
                         </UserProvider>
                     )}
-                    <ReactQueryDevtools initialIsOpen={false} />
+                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                 </SessionProvider>
             </Hydrate>
         </QueryClientProvider>

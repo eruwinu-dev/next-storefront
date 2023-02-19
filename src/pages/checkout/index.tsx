@@ -6,7 +6,6 @@ import { checkUser } from "@/utils/authenticator"
 import Header from "@/components/Layout/Header"
 import { getCart } from "@/lib/cart/getCart"
 
-import nookies from "nookies"
 import { getCheckOut } from "@/lib/checkout/getCheckOut"
 import CheckoutGrid from "@/components/User/CheckoutGrid"
 import { getAddresses } from "@/lib/addresses/getAddresses"
@@ -39,11 +38,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const cookies = nookies.get(context)
+    const orderIdString = context.req.cookies["checkout-cart"] || ""
 
-    const orderIds = cookies["checkout-cart"].split(" ")
-
-    if (!orderIds || !orderIds.length) {
+    if (!orderIdString || !orderIdString.length) {
         return {
             redirect: {
                 destination: "/cart",
@@ -63,7 +60,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     })
     await queryClient.prefetchQuery({
         queryKey: ["checkout"],
-        queryFn: async () => await getCheckOut(user.id, orderIds),
+        queryFn: async () =>
+            await getCheckOut(user?.id as string, orderIdString.split(" ")),
     })
     await queryClient.prefetchQuery({
         queryKey: ["user", "addresses"],

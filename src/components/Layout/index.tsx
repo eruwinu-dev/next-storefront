@@ -1,8 +1,6 @@
 import React, { ReactNode } from "react"
 import { Lora, Inter } from "@next/font/google"
 
-import Header from "./Header"
-
 type Props = {
     children: ReactNode
 }
@@ -27,6 +25,9 @@ const Layout = ({ children }: Props) => {
                 `}
             </style>
             {children}
+            <footer className="footer p-8 bg-primary-focus text-base-100 grid grid-cols-1 grid-flow-row place-items-center">
+                Made by E. Encisa
+            </footer>
         </>
     )
 }

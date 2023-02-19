@@ -13,7 +13,7 @@ const ProductsGrid = (props: Props) => {
     if (!products) return <></>
 
     return (
-        <section className="grid grid-cols-1 grid-flow-row gap-4 p-4 rounded-lg shadow-lg bg-gray-50">
+        <section className="grid grid-cols-1 grid-flow-row gap-4 p-4">
             <div className="grid grid-cols-2 grid-flow-row place-content-end gap-4">
                 <div>
                     <h1 className="text-2xl font-bold">Products</h1>

@@ -87,6 +87,7 @@ model Order {
   progress  OrderProgress[]
   productId String          @map("product_id") @db.ObjectId
   Product   Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  updatedAt DateTime        @default(now())
 }
 
 model Rating {
@@ -147,6 +148,9 @@ enum OrderStatus {
   SHIPMENT
   DELIVERY
   PAYMENT
+  COMPLETE
+  RETURN
+  CANCELLATION
 }
 
 enum StoreStatus {
@@ -155,9 +159,10 @@ enum StoreStatus {
 }
 
 type OrderProgress {
-  status  OrderStatus
-  message String
-  date    DateTime    @default(now())
+  status      OrderStatus
+  destination String?
+  current     String?
+  date        DateTime    @default(now())
 }
 
 type StoreProgress {

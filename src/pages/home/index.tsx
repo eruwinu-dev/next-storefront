@@ -18,7 +18,7 @@ const Home = ({}: Props) => {
                 <title>Home</title>
             </Head>
             <Header />
-            <main className="flex flex-col items-center justify-start space-y-8">
+            <main className="flex flex-col items-center justify-start">
                 <UserGrid />
                 <ProductsGrid />
             </main>

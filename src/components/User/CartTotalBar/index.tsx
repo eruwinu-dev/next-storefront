@@ -4,14 +4,14 @@ import { useGetCart } from "@/hooks/cart/useGetCart"
 import { priceFormatter } from "@/utils/priceFormatter"
 import { summer } from "@/utils/summer"
 import { useRouter } from "next/router"
-import { setCookie } from "nookies"
 import React, { ChangeEvent, MouseEvent, useMemo } from "react"
 
 type Props = {}
 
 const CartTotalBar = (props: Props) => {
     const { push } = useRouter()
-    const { checkOutOrderIds, setCheckOutOrderIds } = useUserContext()
+    const { checkOutOrderIds, setCheckOutOrderIds, setCheckoutCookie } =
+        useUserContext()
     const { data: cart } = useGetCart()
     const { mutateAsync: mutateDeleteCartOrders } = useDeleteCartOrders()
 
@@ -49,10 +49,8 @@ const CartTotalBar = (props: Props) => {
     }
 
     const checkOutCart = async (event: MouseEvent<HTMLButtonElement>) => {
-        setCookie(null, "checkout-cart", checkOutOrderIds.join(" "), {
-            maxAge: 30 * 24 * 60 * 60,
-            sameSite: true,
-        })
+        const cookie = await setCheckoutCookie()
+        if (!cookie) return
         push("/checkout")
     }
 

@@ -22,6 +22,8 @@ export interface SellerAction {
     addVariant: ActionStatus
     editVariant: ActionStatus
     deleteVariant: ActionStatus
+    proceedOrder: ActionStatus
+    cancelOrder: ActionStatus
 }
 
 export interface SellerDialog {
@@ -34,6 +36,8 @@ export interface SellerDialog {
     addVariant: boolean
     editVariant: boolean
     deleteVariant: boolean
+    proceedOrder: boolean
+    cancelOrder: boolean
 }
 
 export interface StoreWithProducts extends Store {
@@ -55,6 +59,10 @@ export interface SellerContextType {
     findStore: (id: string) => Store | undefined
     selectedVariantId: string | null
     selectVariant: (id: string | null) => void
+    selectedCategory: string
+    selectCategory: (status: string) => void
+    selectedOrderId: string | null
+    selectOrder: (id: string | null) => void
     sellerAction: SellerAction
     toggleSellerAction: (prop: keyof SellerAction, state: ActionStatus) => void
     sellerDialog: SellerDialog

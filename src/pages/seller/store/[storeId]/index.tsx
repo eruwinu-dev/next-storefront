@@ -13,6 +13,9 @@ import { checkUser } from "@/utils/authenticator"
 import { getStore } from "@/lib/store/getStores"
 import Header from "@/components/Layout/Header"
 import { getCart } from "@/lib/cart/getCart"
+import OrdersDashboard from "@/components/Seller/OrdersDashboard"
+import ProceedOrderDialog from "@/components/Seller/ProceedOrderDialog"
+import CancelOrderDialog from "@/components/Seller/CancelOrderDialog"
 
 type Props = {
     seller: User
@@ -44,7 +47,10 @@ const Store = ({ seller }: Props) => {
             <main className="grid grid-cols-1 grid-flow-row gap-8 place-content-start">
                 <StoreDashboard />
                 <ProductsDashboard />
+                <OrdersDashboard />
                 <AddProductDialog />
+                <ProceedOrderDialog />
+                <CancelOrderDialog />
             </main>
         </>
     )
