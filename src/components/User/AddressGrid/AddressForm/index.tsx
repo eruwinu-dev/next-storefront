@@ -35,8 +35,6 @@ const AddressForm = ({ form }: Props) => {
         mode: "all",
     })
 
-    if (form === "EDIT" && !address) return <></>
-
     const onSubmit: SubmitHandler<AddressSchema> = async (data) => {
         const prop = form === "ADD" ? "addAddress" : "editAddress"
         toggleUserAction(prop, "LOADING")
@@ -61,6 +59,7 @@ const AddressForm = ({ form }: Props) => {
         return () => {}
     }, [address])
 
+    if (form === "EDIT" && !address) return <></>
     if (!user) return <></>
 
     return (
