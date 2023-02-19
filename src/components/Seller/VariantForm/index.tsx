@@ -23,8 +23,6 @@ const VariantForm = ({ form }: Props) => {
         (variant) => variant.id === selectedVariantId
     )
 
-    if (form === "EDIT" && !variant) return <></>
-
     const {
         register,
         handleSubmit,
@@ -55,6 +53,8 @@ const VariantForm = ({ form }: Props) => {
         toggleSellerAction(prop, "SUCCESS")
         selectVariant(null)
     }
+
+    if (form === "EDIT" && !variant) return <></>
 
     return (
         <form

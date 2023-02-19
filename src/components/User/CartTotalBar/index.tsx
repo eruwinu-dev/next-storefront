@@ -15,22 +15,26 @@ const CartTotalBar = (props: Props) => {
     const { data: cart } = useGetCart()
     const { mutateAsync: mutateDeleteCartOrders } = useDeleteCartOrders()
 
-    if (!cart) return <></>
-
-    const orderIds = cart.map((order) => order.id)
-    const allSelected = cart.length
-        ? orderIds.every((id) => checkOutOrderIds.includes(id))
+    const orderIds = cart ? cart.map((order) => order.id) : []
+    const allSelected = cart
+        ? cart.length
+            ? orderIds.every((id) => checkOutOrderIds.includes(id))
+            : false
         : false
 
     let totalPrice = useMemo(
         () =>
             summer(
                 cart
-                    .filter((order) => checkOutOrderIds.includes(order.id))
-                    .map((order) => ({
-                        price: order.Variant?.price || 0,
-                        quantity: order.quantity,
-                    }))
+                    ? cart
+                          .filter((order) =>
+                              checkOutOrderIds.includes(order.id)
+                          )
+                          .map((order) => ({
+                              price: order.Variant?.price || 0,
+                              quantity: order.quantity,
+                          }))
+                    : []
             ),
         [checkOutOrderIds, cart]
     )
@@ -53,6 +57,8 @@ const CartTotalBar = (props: Props) => {
         if (!cookie) return
         push("/checkout")
     }
+
+    if (!cart) return <></>
 
     return (
         <section className="sticky bottom-0 left-0 p-8 bg-white drop-shadow-2xl rounded-t-lg grid grid-cols-2 grid-flow-row">

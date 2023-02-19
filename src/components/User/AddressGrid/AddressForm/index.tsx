@@ -35,6 +35,19 @@ const AddressForm = ({ form }: Props) => {
         mode: "all",
     })
 
+    if (form === "EDIT" && !address) return <></>
+
+    const onSubmit: SubmitHandler<AddressSchema> = async (data) => {
+        const prop = form === "ADD" ? "addAddress" : "editAddress"
+        toggleUserAction(prop, "LOADING")
+        if (form === "ADD") {
+            await mutateAddAddress(data)
+        } else if (form === "EDIT") {
+            await mutateEditAddress({ info: data, id: address?.id as string })
+        }
+        toggleUserAction(prop, "SUCCESS")
+    }
+
     useEffect(() => {
         setValue("name", user?.name as string)
         if (form === "EDIT" && address) {
@@ -49,19 +62,6 @@ const AddressForm = ({ form }: Props) => {
     }, [address])
 
     if (!user) return <></>
-
-    if (form === "EDIT" && !address) return <></>
-
-    const onSubmit: SubmitHandler<AddressSchema> = async (data) => {
-        const prop = form === "ADD" ? "addAddress" : "editAddress"
-        toggleUserAction(prop, "LOADING")
-        if (form === "ADD") {
-            await mutateAddAddress(data)
-        } else if (form === "EDIT") {
-            await mutateEditAddress({ info: data, id: address?.id })
-        }
-        toggleUserAction(prop, "SUCCESS")
-    }
 
     return (
         <form

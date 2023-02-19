@@ -24,20 +24,21 @@ const CheckoutGrid = (props: Props) => {
     const { data: addresses } = useGetAddresses()
     const { mutateAsync: mutateCheckOut } = useCheckOut()
 
-    if (!checkout) return <></>
-    if (!addresses) return <></>
-
-    let groupedCheckout = groupBy(checkout, (i) => i.Product.storeId)
+    let groupedCheckout = checkout
+        ? groupBy(checkout, (i) => i.Product.storeId)
+        : {}
     let storesInCheckout = Object.keys(groupedCheckout)
 
     let totalPrice = useMemo(
         () =>
-            summer(
-                checkout.map((order) => ({
-                    price: order.Variant?.price || 0,
-                    quantity: order.quantity,
-                }))
-            ),
+            checkout
+                ? summer(
+                      checkout.map((order) => ({
+                          price: order.Variant?.price || 0,
+                          quantity: order.quantity,
+                      }))
+                  )
+                : 0,
         [checkout]
     )
 
@@ -48,16 +49,25 @@ const CheckoutGrid = (props: Props) => {
     }
 
     const selectedAddress = useMemo(
-        () => addresses.find((address) => address.id === checkoutAddressId),
+        () =>
+            addresses
+                ? addresses.find((address) => address.id === checkoutAddressId)
+                : undefined,
         [checkoutAddressId]
     )
 
     useEffect(() => {
-        let defaultAddress = addresses.find((address) => address.isDefault)
-        if (!defaultAddress) return
-        selectCheckoutAddress(defaultAddress.id || null)
+        let defaultAddress = addresses
+            ? addresses.find((address) => address.isDefault)
+            : undefined
+        if (defaultAddress) {
+            selectCheckoutAddress(defaultAddress.id || null)
+        }
         return () => {}
     }, [])
+
+    if (!checkout) return <></>
+    if (!addresses) return <></>
 
     const checkOutHandler = async (event: MouseEvent<HTMLButtonElement>) => {
         if (!checkoutAddressId) return
